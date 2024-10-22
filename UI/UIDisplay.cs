@@ -146,9 +146,9 @@ public class UIDisplay : MonoBehaviour
     
     void Init()
     {
-        goldTmp = GameObject.Find("Canvas").transform.Find("Top Panel").transform.Find("GoldTab").transform.Find("GoldText").GetComponent<TextMeshProUGUI>();
-        jewelTmp = GameObject.Find("Canvas").transform.Find("Top Panel").transform.Find("JewelTab").transform.Find("JewelText").GetComponent<TextMeshProUGUI>();
-        maximumStarCountTMP = GameObject.Find("Canvas").transform.Find("Top Panel").transform.Find("InfoTab").transform.Find("maximumStarCountText").GetComponent<TextMeshProUGUI>();
+        goldTmp = GameObject.Find("Canvas6").transform.Find("Top Panel").transform.Find("GoldTab").transform.Find("GoldText").GetComponent<TextMeshProUGUI>();
+        jewelTmp = GameObject.Find("Canvas6").transform.Find("Top Panel").transform.Find("JewelTab").transform.Find("JewelText").GetComponent<TextMeshProUGUI>();
+        maximumStarCountTMP = GameObject.Find("Canvas6").transform.Find("Top Panel").transform.Find("InfoTab").transform.Find("maximumStarCountText").GetComponent<TextMeshProUGUI>();
         UpdateGoldText(DataManager.Instance.Gold);
         UpdateJewelText(DataManager.Instance.Jewel);
         UpdateMaximumStarCountText();
@@ -162,7 +162,7 @@ public class UIDisplay : MonoBehaviour
         int xSpacing = 80;
         int ySpacing = 85;
         int idx = 0;
-        Vector2 pos = new Vector2(-360, -700);
+        Vector2 pos = new Vector2(-360, -190);
 
         foreach (int count in list)
         {
@@ -180,7 +180,7 @@ public class UIDisplay : MonoBehaviour
                 pos = new Vector2(pos.x + xSpacing, pos.y);
                 if(pos.x == 440)
                 {
-                    pos = new Vector2(-320, -700 - ySpacing);
+                    pos = new Vector2(-320, -190 - ySpacing);
                 }
             }
             idx++;
@@ -190,7 +190,7 @@ public class UIDisplay : MonoBehaviour
     void InitGame()
     {
         Init();
-        starsGroup = GameObject.Find("Canvas").transform.Find("StarsGroup").gameObject;
+        starsGroup = GameObject.Find("Canvas6").transform.Find("StarsGroup").gameObject;
         StarSetting();
     }
 
@@ -199,24 +199,24 @@ public class UIDisplay : MonoBehaviour
         Init();
         
         starUpgradeBoxList = new List<GameObject>();
-        GameObject go = GameObject.Find("Canvas").transform.Find("StarTab Scroll View").transform.Find("Viewport").transform.Find("Content").gameObject;
+        GameObject go = GameObject.Find("Canvas5").transform.Find("StarTab Scroll View").transform.Find("Viewport").transform.Find("Content").gameObject;
         foreach(Transform box in go.transform)
         {
             starUpgradeBoxList.Add(box.gameObject);
         }
 
         getJewelUI = Resources.Load<GameObject>("Prefabs/Get Jewel UI");
-        getJewelUIGroup = GameObject.Find("Canvas").transform.Find("GetJewelUIGroup").gameObject;
-        battleButton = GameObject.Find("Canvas").transform.Find("Button Group").transform.Find("Battle Button").transform.Find("GameButton").gameObject;
-        bossButton = GameObject.Find("Canvas").transform.Find("Button Group").transform.Find("Battle Button").transform.Find("BossButton").gameObject;
-        powerText = GameObject.Find("Canvas").transform.Find("Tab Bgd").transform.Find("PowerText").gameObject.GetComponent<TextMeshProUGUI>();
-        criticalChanceText = GameObject.Find("Canvas").transform.Find("Tab Bgd").transform.Find("CriticalChanceText").gameObject.GetComponent<TextMeshProUGUI>();
-        criticalDamageText = GameObject.Find("Canvas").transform.Find("Tab Bgd").transform.Find("CriticalDamageText").gameObject.GetComponent<TextMeshProUGUI>();
-        goldGainText = GameObject.Find("Canvas").transform.Find("Tab Bgd").transform.Find("GoldGainText").gameObject.GetComponent<TextMeshProUGUI>();
-        getNewWeaponPopup = GameObject.Find("Canvas2").transform.Find("GetNewWeaponPopup").gameObject;
+        getJewelUIGroup = GameObject.Find("Canvas2").transform.Find("GetJewelUIGroup").gameObject;
+        battleButton = GameObject.Find("Canvas3").transform.Find("Button Group").transform.Find("Battle Button").transform.Find("GameButton").gameObject;
+        bossButton = GameObject.Find("Canvas3").transform.Find("Button Group").transform.Find("Battle Button").transform.Find("BossButton").gameObject;
+        powerText = GameObject.Find("Canvas5").transform.Find("Tab Bgd").transform.Find("PowerText").gameObject.GetComponent<TextMeshProUGUI>();
+        criticalChanceText = GameObject.Find("Canvas5").transform.Find("Tab Bgd").transform.Find("CriticalChanceText").gameObject.GetComponent<TextMeshProUGUI>();
+        criticalDamageText = GameObject.Find("Canvas5").transform.Find("Tab Bgd").transform.Find("CriticalDamageText").gameObject.GetComponent<TextMeshProUGUI>();
+        goldGainText = GameObject.Find("Canvas5").transform.Find("Tab Bgd").transform.Find("GoldGainText").gameObject.GetComponent<TextMeshProUGUI>();
+        getNewWeaponPopup = GameObject.Find("Canvas4").transform.Find("GetNewWeaponPopup").gameObject;
         getNewWeaponPopupText = getNewWeaponPopup.transform.Find("Name").GetComponent<TextMeshProUGUI>();
         getNewWeaponPopupImg = getNewWeaponPopup.transform.Find("Img").GetComponent<Image>();
-        noti = GameObject.Find("Canvas").transform.Find("Noti").gameObject;
+        noti = GameObject.Find("Canvas7").transform.Find("Noti").gameObject;
         notiCG = noti.GetComponent<CanvasGroup>();
         notiImg = noti.transform.Find("Img").GetComponent<Image>();
         notiText = noti.transform.Find("Text").GetComponent<TextMeshProUGUI>();

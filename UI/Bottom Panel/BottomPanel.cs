@@ -4,32 +4,25 @@ using UnityEngine;
 
 public class BottomPanel : MonoBehaviour
 {
-    TabBgd tabBgd;
-    StarTab starTab;
-    UpgradeTab upgradeTab;
-    ItemTab itemTab;
-
-    StarTabScrollView starTabScrollView;
-    UpgradeScrollView upgradeScrollView;
-    ItemTabScrollView itemTabScrollView;
+    [SerializeField] GameObject supportBgd;
+    [SerializeField] TabBgd tabBgd;
+    [SerializeField] StarTab starTab;
+    [SerializeField] UpgradeTab upgradeTab;
+    [SerializeField] ItemTab itemTab;
+    [SerializeField] StarTabScrollView starTabScrollView;
+    [SerializeField] UpgradeScrollView upgradeScrollView;
+    [SerializeField] ItemTabScrollView itemTabScrollView;
 
     void Start()
     {
-        tabBgd = GameObject.Find("Canvas").transform.Find("Tab Bgd").GetComponent<TabBgd>();
-        starTab = GameObject.Find("Canvas").transform.Find("Bottom Panel").transform.Find("StarTab").GetComponent<StarTab>();
-        upgradeTab = GameObject.Find("Canvas").transform.Find("Bottom Panel").transform.Find("UpgradeTab").GetComponent<UpgradeTab>();
-        itemTab = GameObject.Find("Canvas").transform.Find("Bottom Panel").transform.Find("ItemTab").GetComponent<ItemTab>();
-
-        starTabScrollView = GameObject.Find("Canvas").transform.Find("StarTab Scroll View").GetComponent<StarTabScrollView>();
-        upgradeScrollView = GameObject.Find("Canvas").transform.Find("Upgrade Scroll View").GetComponent<UpgradeScrollView>();
-        itemTabScrollView = GameObject.Find("Canvas").transform.Find("Item Scroll View").GetComponent<ItemTabScrollView>();
+        supportBgd.SetActive(false);
     }
 
     public void StarTabClick(bool isPressed)
     {
-
         if (!isPressed)
         {
+            supportBgd.SetActive(true);
             starTab.Pressed();
             tabBgd.On();
             starTabScrollView.On();
@@ -41,6 +34,7 @@ public class BottomPanel : MonoBehaviour
         }
         else
         {
+            supportBgd.SetActive(false);
             starTab.Normal();
             tabBgd.Off();
             starTabScrollView.Off();
@@ -52,6 +46,7 @@ public class BottomPanel : MonoBehaviour
         if (!isPressed)
         {
             upgradeTab.Pressed();
+            supportBgd.SetActive(true);
             tabBgd.On();
             upgradeScrollView.On();
 
@@ -63,6 +58,7 @@ public class BottomPanel : MonoBehaviour
         else
         {
             upgradeTab.Normal();
+            supportBgd.SetActive(false);
             tabBgd.Off();
             upgradeScrollView.Off();
         }
@@ -73,6 +69,7 @@ public class BottomPanel : MonoBehaviour
         if (!isPressed)
         {
             itemTab.Pressed();
+            supportBgd.SetActive(true);
             tabBgd.On();
             itemTabScrollView.On();
 
@@ -84,6 +81,7 @@ public class BottomPanel : MonoBehaviour
         else
         {
             itemTab.Normal();
+            supportBgd.SetActive(false);
             tabBgd.Off();
             itemTabScrollView.Off();
         }

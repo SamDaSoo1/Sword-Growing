@@ -11,6 +11,8 @@ public class CombineThrowingStar : MonoBehaviour, IDragHandler, IEndDragHandler
     ThrowingStarsMake throwingStarsMake;
     GameObject StarsGroup;
     RectTransform range_of_movement;
+    RectTransform canvasRect;
+    float canvasScale;
 
     int numbering;         // 할당되는 값이 수비 표창 == 1, 무한의 수리검 == 16
     int lastStar = 16;
@@ -26,9 +28,11 @@ public class CombineThrowingStar : MonoBehaviour, IDragHandler, IEndDragHandler
 
     void Start()
     {
-        throwingStarsMake = GameObject.Find("Canvas").GetComponentInChildren<ThrowingStarsMake>();
-        StarsGroup = GameObject.Find("Canvas").transform.Find("StarsGroup").gameObject;
-        range_of_movement = GameObject.Find("Canvas").transform.Find("Range of movement").GetComponent<RectTransform>();
+        throwingStarsMake = FindObjectOfType<ThrowingStarsMake>();
+        StarsGroup = GameObject.Find("Canvas2").transform.Find("StarsGroup").gameObject;
+        range_of_movement = GameObject.Find("Canvas2").transform.Find("Range of movement").GetComponent<RectTransform>();
+        canvasRect = GameObject.Find("Canvas2").GetComponent<RectTransform>();
+        canvasScale = canvasRect.localScale.x;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -72,7 +76,7 @@ public class CombineThrowingStar : MonoBehaviour, IDragHandler, IEndDragHandler
         float dist;
         string grade;
 
-        colliders = Physics2D.OverlapCircleAll(transform.position, radius);
+        colliders = Physics2D.OverlapCircleAll(transform.position, radius * canvasScale);
         foreach (Collider2D collider in colliders)
         {
             grade = collider.name;
@@ -109,7 +113,7 @@ public class CombineThrowingStar : MonoBehaviour, IDragHandler, IEndDragHandler
         newStar.transform.position = newStarPos;
         DataManager.Instance.Combine(numbering);
         UIDisplay.Instance.GetJewelUI(numbering, newStarPos);
-        EffectPoolManager.Instance.PlayEffect(numbering - 1, newStarPos);
+        EffectPoolManager.Instance.PlayEffect(newStarPos);
         DataManager.Instance.TotalCount -= 1;
     }
 
@@ -128,14 +132,14 @@ public class CombineThrowingStar : MonoBehaviour, IDragHandler, IEndDragHandler
         newStar.transform.position = newStarPos;
         DataManager.Instance.LevelUp(numbering);
         UIDisplay.Instance.GetJewelUI(numbering, newStarPos);
-        EffectPoolManager.Instance.PlayEffect(numbering - 1, newStarPos);
+        EffectPoolManager.Instance.PlayEffect(newStarPos);
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmos()
     {
-#if UNITY_EDITOR
         Handles.color = Color.red;
-        Handles.DrawWireDisc(transform.position, Vector3.forward, radius);
-#endif
+        Handles.DrawWireDisc(transform.position, Vector3.forward, radius * canvasScale);
     }
+#endif
 }

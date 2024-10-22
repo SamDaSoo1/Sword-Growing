@@ -4,13 +4,11 @@ using UnityEngine.UI;
 
 public class SendBtn : MonoBehaviour
 {
-    [SerializeField]
-    TMP_InputField message;
+    [SerializeField] TMP_InputField message;
     FirebaseController firebaseController;
 
     void Start()
     {
-        message = GameObject.Find("Canvas2").transform.Find("ChatPanel").transform.Find("MessageBox").GetComponent<TMP_InputField>();
         firebaseController = FindObjectOfType<FirebaseController>();
     }
 

@@ -3,19 +3,12 @@ using UnityEngine;
 
 public class CreateNickNameBtn : MonoBehaviour
 {
-    TextMeshProUGUI nickName;
-    GameObject loginPanel;
-    FirebaseController firebaseController;
+    [SerializeField] GameObject loginPanel;
+    [SerializeField] TextMeshProUGUI nickName;
+    [SerializeField] FirebaseController firebaseController;
 
     readonly int minLength = 2;
     readonly int maxLength = 8;
-
-    void Start()
-    {
-        loginPanel = GameObject.Find("Canvas").transform.Find("Login Panel").gameObject;
-        nickName = loginPanel.transform.Find("InputField (TMP)").transform.Find("Text Area").transform.Find("Text").GetComponent<TextMeshProUGUI>();
-        firebaseController = FindObjectOfType<FirebaseController>();
-    }
 
     public void Click()
     {
@@ -27,7 +20,6 @@ public class CreateNickNameBtn : MonoBehaviour
         }
 
         PlayerPrefs.SetString("NickName", nickName.text);
-        DataManager.Instance.NickName = nickName.text;
         loginPanel.SetActive(false);
         firebaseController.SignIn();
     }

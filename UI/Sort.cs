@@ -8,7 +8,7 @@ public class Sort : MonoBehaviour
 {
     [SerializeField] Button button;
     [SerializeField] Slider slider;
-    StarsGroup starsGroup;
+    [SerializeField] StarsGroup starsGroup;
 
     Vector2 startPosition = new Vector2(-270.0f, 400.0f);
 
@@ -24,11 +24,6 @@ public class Sort : MonoBehaviour
     private void Awake()
     {
         slider.value = 1;
-    }
-
-    void Start()
-    {
-        starsGroup = GameObject.Find("Canvas").GetComponentInChildren<StarsGroup>();
     }
     
     IEnumerator CoolTime()

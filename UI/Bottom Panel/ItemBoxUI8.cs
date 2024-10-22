@@ -17,10 +17,12 @@ public class ItemBoxUI8 : MonoBehaviour
     string notiTextLiberationFailed = "모든 검이 최대 레벨입니다.";
     Color notiColorMagnetOffPlz = new Color(40 / 255f, 144 / 255f, 133 / 255f);
     string notiTextMagnetOffPlz = "자석을 꺼주세요.";
+    Color notiColorPurchased = new Color(40 / 255f, 190 / 255f, 37 / 255f);
+    string notiTextPurchased = "구매 완료";
 
     public void Click()
     {
-        SoundManager.Instance.PlaySFX(Sfx.Button);
+        //SoundManager.Instance.PlaySFX(Sfx.Button);
         if (DataManager.Instance.Jewel >= jewel)
         {
             Liberation();
@@ -50,6 +52,7 @@ public class ItemBoxUI8 : MonoBehaviour
         }
 
         SoundManager.Instance.PlaySFX(Sfx.PurchaseSuccessed);
+        UIDisplay.Instance.NotiUI(notiColorPurchased, notiTextPurchased);
 
         // 데이터 갱신하고
         DataManager.Instance.Jewel -= jewel;

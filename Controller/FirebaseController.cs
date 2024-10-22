@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Firebase.Database;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using Firebase;
 
 public class FirebaseController : MonoBehaviour
 {
@@ -91,6 +92,15 @@ public class FirebaseController : MonoBehaviour
                        if(task.IsFaulted)
                        {
                            Debug.LogError("SignIn Failed");
+                           var exception = task.Exception?.InnerExceptions[0] as FirebaseException;
+                           if (exception != null)
+                           {
+                               Debug.LogError($"Firebase Auth Error: {exception.Message} (Code: {exception.ErrorCode})");
+                           }
+                           else
+                           {
+                               Debug.LogError("An unknown error occurred.");
+                           }
                        }
                        else if(task.IsCompleted)
                        {
@@ -106,7 +116,6 @@ public class FirebaseController : MonoBehaviour
 
     public void ReadChatMessage()
     {
-        
         chatDB.GetValueAsync()
               .ContinueWithOnMainThread(task =>
               {
@@ -130,6 +139,7 @@ public class FirebaseController : MonoBehaviour
 
     public void SendChatMessage(string username, string message)
     {
+       
         chatDB.OrderByChild("timestamp").LimitToLast(1).ValueChanged -= ReceiveMessage;
         chatDB.OrderByChild("timestamp").LimitToLast(1).ValueChanged += ReceiveMessage;
 
@@ -161,7 +171,7 @@ public class FirebaseController : MonoBehaviour
         
         if(snapshot == default)
         {
-            print("리턴");
+            //print("리턴");
             return;
         }
         //Debug.Log("ChildrenCount: " + snapshot.ChildrenCount);

@@ -2,12 +2,7 @@ using UnityEngine;
 
 public class ChatBtn : MonoBehaviour
 {
-    GameObject chatPanel;
-
-    void Start()
-    {
-        chatPanel = GameObject.Find("Canvas2").transform.Find("ChatPanel").gameObject;
-    }
+    [SerializeField] GameObject chatPanel;
 
     public void Click()
     {

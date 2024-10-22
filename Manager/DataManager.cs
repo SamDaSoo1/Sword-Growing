@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -58,7 +57,7 @@ public class DataManager : MonoBehaviour
     HaveStarData haveStarData;
     GameData gameData;
 
-    public event Action<long> GoldChanged;
+   
     public event Action<long> JewelChanged;
     public event Action<int> Highest_Star_Changed;
     public event Action TotalCountChanged;
@@ -77,6 +76,9 @@ public class DataManager : MonoBehaviour
             gameData.nickName = value;
         }
     }
+
+    public event Action<long> GoldChanged;
+
     public long Gold 
     {
         get { return gameData.gold; }
@@ -93,6 +95,7 @@ public class DataManager : MonoBehaviour
             }
         }
     }
+
     public long Jewel
     {
         get { return gameData.jewel; }
@@ -270,12 +273,13 @@ public class DataManager : MonoBehaviour
 
     void Start()
     {
+        //print($"--------------------------데이터 매니저 Start 실행-------------------------------");
         SceneManager.sceneLoaded += JsonFileUpdate;
     }
 
     private void OnDestroy()
     {
-        if(instance == this)
+        if(instance == this) 
         {
             isDestroyed = true;
             instance = null;
@@ -287,9 +291,22 @@ public class DataManager : MonoBehaviour
         haveStarData.starsCount[0]++;
     }
 
-    void OnApplicationQuit()
+    private void OnApplicationPause(bool pause)
     {
-        JsonFileUpdate(default, default);
+        if(pause)
+        {
+            //print("게임 중지.. 게임 정보 저장중");
+            JsonFileUpdate(default, default);
+        }
+    }
+
+    void OnApplicationFocus(bool focus)
+    {
+        if(!focus)
+        {
+            //print("게임 이탈.. 게임 정보 저장중");
+            JsonFileUpdate(default, default);
+        }
     }
 
     public void Combine(int createdStar)
@@ -314,6 +331,7 @@ public class DataManager : MonoBehaviour
 
     void JsonFileUpdate(Scene scene, LoadSceneMode mode)
     {
+        //print($"--------------------------데이터 매니저 JsonFileUpdate 실행-------------------------------");
         if (instance != null)
         {
             JsonFileManager<HaveStarData>.Instance.Write(haveStarData, "HaveStarData");

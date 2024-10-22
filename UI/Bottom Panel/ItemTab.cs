@@ -5,23 +5,13 @@ using UnityEngine.UI;
 
 public class ItemTab : MonoBehaviour
 {
-    BottomPanel bottomPanel;
-    Image btnImg;
+    [SerializeField] BottomPanel bottomPanel;
+    [SerializeField] Image btnImg;
 
     Color pressed = new Color(125 / 255f, 125 / 255f, 125 / 255f);
     Color normal = Color.white;
 
     bool isPressed = false;
-
-    void Awake()
-    {
-        btnImg = transform.Find("Button").GetComponent<Image>();
-    }
-
-    void Start()
-    {
-        bottomPanel = GameObject.Find("Canvas").transform.Find("Bottom Panel").GetComponent<BottomPanel>();
-    }
 
     public void Click()
     {

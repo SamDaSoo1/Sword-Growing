@@ -18,13 +18,13 @@ public class ShootStar : MonoBehaviour, IDragHandler
     float duration = 2f;
 
     //  아무것도 못맞추고 밖으로 나가는 궤적일 때 사라지는 범위
-    int yMax = 680;
+    int yMax = 1220;
     int xMin = -480;
     int xMax = 480;
 
     void Start()
     {
-        range_of_movement = GameObject.Find("Canvas").transform.Find("Range of movement").GetComponent<RectTransform>();
+        range_of_movement = GameObject.Find("Canvas6").transform.Find("Range of movement").GetComponent<RectTransform>();
         rect = gameObject.GetComponent<RectTransform>();
     }
 
@@ -56,7 +56,7 @@ public class ShootStar : MonoBehaviour, IDragHandler
 
         transform.position = new Vector3(worldPosition.x, worldPosition.y, transform.position.z);
 
-        if (transform.position.y < topLeft.y - 2)
+        if (transform.position.y < topLeft.y - 0.2f)
         {
             isDrag = true;
             savePos = rect.anchoredPosition;
@@ -68,7 +68,6 @@ public class ShootStar : MonoBehaviour, IDragHandler
             isDrag = false;
             Vector2 endPos = rect.anchoredPosition;
             Vector2 dir = (endPos - savePos).normalized;
-
             int num = Random.Range(0, 2);
             if (num == 0)
                 rect.DORotate(endValue, duration, RotateMode.FastBeyond360);
@@ -89,7 +88,7 @@ public class ShootStar : MonoBehaviour, IDragHandler
     {
         int swordLevel = int.Parse(gameObject.GetComponent<Image>().sprite.name);
         Vector3 collisionPos = transform.position;
-        EffectPoolManager.Instance.PlayEffect(swordLevel - 1, collisionPos);
+        EffectPoolManager.Instance.PlayEffect(collisionPos);
 
         rect.DOKill();
         if(!isMiss)

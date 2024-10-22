@@ -125,12 +125,15 @@ public class ThrowingStarsMakeUI : MonoBehaviour
         {
             // 백그라운드 아닌 경우
             sw.Stop();
-            print($"{sw.ElapsedMilliseconds}ms동안 잠수");
-            CurrentCount += (int)sw.ElapsedMilliseconds / DataManager.Instance.Star_Make_CoolTime;
+            //print($"----------------------{sw.Elapsed.TotalSeconds}s동안 잠수--------------------------");
+            //print($"----------------------쿹타임: {DataManager.Instance.Star_Make_CoolTime}--------------------------");
+            //print($"----------------------추가되는 충전갯수: {(int)sw.Elapsed.TotalSeconds / DataManager.Instance.Star_Make_CoolTime}--------------------------");
+            //print($"----------------------충전 이전 갯수: {CurrentCount}개--------------------------");
+            CurrentCount += (int)sw.Elapsed.TotalSeconds / DataManager.Instance.Star_Make_CoolTime;
+            //print($"----------------------충전 후 갯수: {CurrentCount}개--------------------------");
             if (CurrentCount >= 10)
             {
                 CurrentCount = 10;
-                TextUpdate();
                 image2.fillAmount = 1;
                 isCoroutineExecute = false;
                 if (co != null)

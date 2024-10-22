@@ -7,82 +7,73 @@ using DG.Tweening;
 
 public class SceneChange : MonoBehaviour
 {
-    [SerializeField] RawImage maskImg1;
-    [SerializeField] RawImage maskImg2;
-    [SerializeField] RawImage rawImage1; // 캡처된 화면을 표시할 RawImage
-    [SerializeField] RawImage rawImage2; // 캡처된 화면을 표시할 RawImage
-    [SerializeField] ParticleSystem effect;
-    [SerializeField] GameObject sceneChangeImg;
-
-    [SerializeField] GameObject cctv;
-    [SerializeField] RectTransform topImg;
-    [SerializeField] RectTransform bottomImg;
-
+    [SerializeField] GameObject SceneChangeImg2;
+    [SerializeField] GameObject SceneChangeImg;
+    [SerializeField] RectTransform topMaskImgRect;
+    [SerializeField] RectTransform topRawImgRect;
+    [SerializeField] RectTransform bottomMaskImgRect;
+    [SerializeField] RectTransform bottomRawImgRect;
+    [SerializeField] GameObject topMaskImg;
+    [SerializeField] RawImage topRawImg;
+    [SerializeField] GameObject bottomMaskImg;
+    [SerializeField] RawImage bottomRawImg;
+    [SerializeField] RectTransform resolution;
+    [SerializeField] Canvas canvas;
+    ParticleSystem effect;
     Texture2D screenTexture;
+    [SerializeField] RenderTexture renderTexture;
     bool isCoroutineRunning;
-
-    Color alphaZero = new Color(255, 255, 255, 0);
-
-    float movingDist = 1500.0f;
+    float movingDist = 2000.0f;
     float duration = 1.0f;
 
     static SceneChange instance;
-    public static SceneChange Instance
-    {
-        get
-        {
-            if(instance == null)
-            {
-                instance = FindObjectOfType<SceneChange>();
-                if(instance == null )
-                {
-                    GameObject go = new GameObject();
-                    instance = go.AddComponent<SceneChange>();
-                    go.name = "@" + typeof(SceneChange).Name;
 
-                    DontDestroyOnLoad(go);
-                }
-            }
-            return instance;
-        }
-    }
-
-    void Awake()
+    private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else if(instance != this)
+        else if (instance != this)
         {
             Destroy(gameObject);
+            return;
         }
-    }
 
-    void Start()
-    {
-        Init();
-    }
+        topMaskImgRect.sizeDelta = new Vector2(resolution.sizeDelta.x, resolution.sizeDelta.y);
+        topRawImgRect.sizeDelta = new Vector2(resolution.sizeDelta.x, resolution.sizeDelta.y);
+        bottomMaskImgRect.sizeDelta = new Vector2(resolution.sizeDelta.x, resolution.sizeDelta.y);
+        bottomRawImgRect.sizeDelta = new Vector2(resolution.sizeDelta.x, resolution.sizeDelta.y);
 
-    void Init()
-    {
-        rawImage1.GetComponent<RectTransform>().sizeDelta = cctv.GetComponent<RectTransform>().rect.size;
-        rawImage2.GetComponent<RectTransform>().sizeDelta = cctv.GetComponent<RectTransform>().rect.size;
-
-        maskImg1.gameObject.SetActive(false);
-        maskImg1.color = alphaZero;
-        maskImg1.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-
-        maskImg2.gameObject.SetActive(false);
-        maskImg2.color = alphaZero;
-        maskImg2.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-
-        rawImage1.color = alphaZero;
-
-        rawImage2.color = alphaZero;
-
+        SceneChangeImg2.SetActive(false);
+        SceneChangeImg.SetActive(false);
+        topMaskImg.SetActive(false);
+        bottomMaskImg.SetActive(false);
+        renderTexture = Resources.Load<RenderTexture>("RenderTexture");
+        topRawImg.texture = renderTexture;
+        bottomRawImg.texture = renderTexture;
+        effect = Instantiate(Resources.Load<GameObject>("Prefabs/Effect").GetComponent<ParticleSystem>(), transform);
+        var mainModule = effect.main;
+        mainModule.startRotation = 28.71f * (canvas.GetComponent<RectTransform>().sizeDelta.y / 1920.0f ) * Mathf.Deg2Rad;
+        effect.gameObject.name = "SceneChange.effect";
         effect.Stop();
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (canvas == null)
+        {
+            canvas = transform.GetChild(0).GetComponent<Canvas>();
+        }
+        canvas.worldCamera = Camera.main;
+
+        if(scene.name == "Main")
+        {
+            resolution = GameObject.Find("Canvas8(Resolution)").GetComponent<RectTransform>();
+        }
     }
 
     public void SceneLoad(string sceneName)
@@ -90,80 +81,63 @@ public class SceneChange : MonoBehaviour
         if(isCoroutineRunning)
             return;
 
-        Init();
         StartCoroutine(CaptureRenderTexture(sceneName));
     }
 
     IEnumerator CaptureRenderTexture(string sceneName)
     {
         isCoroutineRunning = true;
-
         yield return new WaitForSeconds(0.2f);
-
-        cctv.SetActive(true);
-
-        yield return new WaitForSeconds(1);
 
         SoundManager.Instance.PlaySFX(Sfx.Effect);
         effect.Play();
-
-        yield return new WaitForSeconds(1);
-
-        topImg.DOAnchorPosY(topImg.anchoredPosition.y + movingDist, duration).SetEase(Ease.InQuad);
-        bottomImg.DOAnchorPosY(bottomImg.anchoredPosition.y - movingDist, duration).SetEase(Ease.InQuad);
-
-        yield return new WaitForSeconds(1);
-
-        SceneManager.LoadScene(sceneName);
-        Init();
-
-        yield return new WaitForSeconds(0.2f);
-
-        maskImg1.gameObject.SetActive(true);
-        maskImg2.gameObject.SetActive(true);
-        sceneChangeImg.SetActive(true);
-
-        // 프레임의 끝까지 기다려서 화면을 캡처
         yield return new WaitForEndOfFrame();
 
-        // 화면을 Texture2D로 캡처
         screenTexture = ScreenCapture.CaptureScreenshotAsTexture();
-
-        // RawImage에 적용
-        rawImage1.texture = screenTexture;
-        rawImage2.texture = screenTexture;
-
-        // 투명도 없애기
-        maskImg1.color = Color.white;
-        maskImg2.color = Color.white;
-        rawImage1.color = Color.white;
-        rawImage2.color = Color.white;
-        sceneChangeImg.SetActive(false);
-
+        topRawImg.texture = screenTexture;
+        bottomRawImg.texture = screenTexture;
+        topMaskImg.SetActive(true);
+        bottomMaskImg.SetActive(true);
+        SceneChangeImg2.SetActive(true);
+        SceneChangeImg.SetActive(true);
         yield return new WaitForSeconds(1);
 
+        topMaskImgRect.DOAnchorPosY(topMaskImgRect.anchoredPosition.y + movingDist, duration).SetEase(Ease.InQuad);
+        bottomMaskImgRect.DOAnchorPosY(bottomMaskImgRect.anchoredPosition.y - movingDist, duration).SetEase(Ease.InQuad);
+        yield return new WaitForSeconds(1);
+
+        SceneManager.LoadSceneAsync(sceneName);
+        yield return new WaitForSeconds(1);
+
+        InitSetting();
         SoundManager.Instance.PlaySFX(Sfx.Effect);
         effect.Play();
+        yield return new WaitForEndOfFrame();
 
+        screenTexture = ScreenCapture.CaptureScreenshotAsTexture();
+        topRawImg.texture = screenTexture;
+        bottomRawImg.texture = screenTexture;
+        topMaskImg.SetActive(true);
+        bottomMaskImg.SetActive(true);
+        SceneChangeImg2.SetActive(false);
+        SceneChangeImg.SetActive(false);
         yield return new WaitForSeconds(1);
 
-        RectTransform rt1 = maskImg1.gameObject.GetComponent<RectTransform>();
-        RectTransform rt2 = maskImg2.gameObject.GetComponent<RectTransform>();
-        rt1.DOAnchorPosY(rt1.anchoredPosition.y + movingDist, duration).SetEase(Ease.InQuad);
-        rt2.DOAnchorPosY(rt2.anchoredPosition.y - movingDist, duration).SetEase(Ease.InQuad);
-
+        topMaskImgRect.DOAnchorPosY(topMaskImgRect.anchoredPosition.y + movingDist, duration).SetEase(Ease.InQuad);
+        bottomMaskImgRect.DOAnchorPosY(bottomMaskImgRect.anchoredPosition.y - movingDist, duration).SetEase(Ease.InQuad);
         yield return new WaitForSeconds(1);
-        Init();
-        Init2();
 
+        InitSetting();
         isCoroutineRunning = false;
     }
 
-    void Init2()
+    void InitSetting()
     {
-        cctv.SetActive(false);
-        topImg.anchoredPosition = Vector2.zero;
-        bottomImg.anchoredPosition = Vector2.zero;
-        sceneChangeImg.SetActive(true);
+        topMaskImg.SetActive(false);
+        bottomMaskImg.SetActive(false);
+        topMaskImgRect.anchoredPosition = Vector2.zero;
+        bottomMaskImgRect.anchoredPosition = Vector2.zero;
+        topRawImg.texture = renderTexture;
+        bottomRawImg.texture = renderTexture;
     }
 }

@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SceneStateMonitor : MonoBehaviour
 {
     [SerializeField] GameObject gameMode;
     [SerializeField] GameObject bossMode;
-
+    [SerializeField] Sprite gameBgd;
+    [SerializeField] Sprite bossBgd;
+    [SerializeField] Image bgd;
     static BattleResult battleResult;
 
     static int count;
@@ -35,6 +37,7 @@ public class SceneStateMonitor : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("GameMode") == 1 && PlayerPrefs.GetInt("BossMode") == 0)
         {
+            bgd.sprite = gameBgd;
             StartCoroutine(MiniGameBgm());
             gameMode.SetActive(true);
             bossMode.SetActive(false);
@@ -42,6 +45,7 @@ public class SceneStateMonitor : MonoBehaviour
         }
         else if(PlayerPrefs.GetInt("GameMode") == 0 && PlayerPrefs.GetInt("BossMode") == 1)
         {
+            bgd.sprite = bossBgd;
             StartCoroutine(BossBgm());
             gameMode.SetActive(false);
             bossMode.SetActive(true);

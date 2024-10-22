@@ -10,9 +10,17 @@ public class Target : MonoBehaviour
 {
     [SerializeField] GameObject goldGainPopUp;
     [SerializeField] TargetPointer tp;
+    [SerializeField] RectTransform canvasRect;
+
+    float canvasScale;
     int getGold = 1;
 
     public int HitCount { get; private set; }
+
+    void Start()
+    {
+        canvasScale = canvasRect.localScale.x;
+    }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -27,15 +35,15 @@ public class Target : MonoBehaviour
             SoundManager.Instance.BGMSoundPitchUp();
             int swordLevel = int.Parse(collision.GetComponent<Image>().sprite.name) - 1;
             Vector3 collisionPos = collision.transform.position;
-            EffectPoolManager.Instance.PlayEffect(swordLevel, collisionPos);
+            EffectPoolManager.Instance.PlayEffect(collisionPos);
             Destroy(collision.gameObject);
 
             GameObject go = Instantiate(goldGainPopUp, transform.parent.parent);
             DataManager.Instance.Gold += getGold * DataManager.Instance.Gold_Gained;
             go.GetComponentInChildren<TextMeshProUGUI>().text = $"+{getGold * DataManager.Instance.Gold_Gained}";
             getGold *= 2;
-            go.transform.position = transform.position + Vector3.down * 155;
-            go.transform.DOMove(go.transform.position + Vector3.up * 30, 0.5f).OnComplete(() => Destroy(go));
+            go.transform.position = transform.position + Vector3.down * 155 * canvasScale;
+            go.transform.DOMove(go.transform.position + Vector3.up * 30 * canvasScale, 0.5f).OnComplete(() => Destroy(go));
             tp.SpeedUp();
             transform.localScale *= 0.9f;
             HitCount += 1;

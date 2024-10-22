@@ -38,7 +38,7 @@ public class ItemBoxUI3 : MonoBehaviour
 
     public void Click()
     {
-        SoundManager.Instance.PlaySFX(Sfx.Button);
+        //SoundManager.Instance.PlaySFX(Sfx.Button);
         if (DataManager.Instance.Jewel >= jewel)
         {
             SoundManager.Instance.PlaySFX(Sfx.PurchaseSuccessed);

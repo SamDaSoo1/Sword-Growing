@@ -17,6 +17,7 @@ public class Tutorial : MonoBehaviour
     {
         if (JsonFileManager<HaveStarData>.Instance.Read("HaveStarData") == default)
         {
+            //print($"----------------------제이슨 데이터 없다!!-----------------------");
             pointerImg.gameObject.SetActive(true);
             tmp.gameObject.SetActive(true);
             foreach (GameObject go in blockImgList)
@@ -29,6 +30,7 @@ public class Tutorial : MonoBehaviour
         }
         else
         {
+            //print($"----------------------제이슨 데이터 있다!!-----------------------");
             pointerImg.gameObject.SetActive(false);
             tmp.gameObject.SetActive(false);
             foreach (GameObject go in blockImgList)

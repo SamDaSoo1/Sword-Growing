@@ -6,11 +6,9 @@ using System;
 
 public class ThrowingStarsMake : MonoBehaviour
 {
-    [SerializeField]
-    List<GameObject> stars;
-
-    [SerializeField]
-    GameObject StarsGroup;
+    [SerializeField] List<GameObject> stars;
+    [SerializeField] GameObject StarsGroup;
+    [SerializeField] RectTransform canvasRect;
 
     RectTransform starRect;
 
@@ -35,8 +33,7 @@ public class ThrowingStarsMake : MonoBehaviour
 
         star.name = star.name.Replace(wordToRemove, "");
         starRect = star.GetComponent<RectTransform>();
-
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(GameObject.Find("Canvas").GetComponentInParent<RectTransform>(), transform.position, null, out Vector2 localPosition);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, transform.position, null, out Vector2 localPosition);
         starRect.anchoredPosition = localPosition;
 
         if (DataManager.Instance != null)
@@ -78,7 +75,6 @@ public class ThrowingStarsMake : MonoBehaviour
         };
 
         ThrowingStarsMakeButton.ClickEvent += Make;
-        StarsGroup = GameObject.Find("Canvas").transform.Find("StarsGroup").gameObject;
 
         int idx = 0;
         HaveStarData haveStarData;
@@ -90,7 +86,7 @@ public class ThrowingStarsMake : MonoBehaviour
 
         foreach (int value in haveStarData.starsCount)
         {
-            if(value == 0)
+            if (value == 0)
             {
                 idx++;
                 continue;
@@ -108,7 +104,7 @@ public class ThrowingStarsMake : MonoBehaviour
                 star.name = star.name.Replace(wordToRemove, "");
                 starRect = star.GetComponent<RectTransform>();
 
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(GameObject.Find("Canvas").GetComponentInParent<RectTransform>(), transform.position, null, out Vector2 localPosition);
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, transform.position, null, out Vector2 localPosition);
                 starRect.anchoredPosition = localPosition;
 
                 Vector2 ranDomPos = new Vector2(UnityEngine.Random.Range(xMinimum, xMax), UnityEngine.Random.Range(yMinimum, yMax));

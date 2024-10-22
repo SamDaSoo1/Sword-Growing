@@ -12,7 +12,6 @@ public class TabBgd : MonoBehaviour
     [SerializeField] GameObject tmp3;
     [SerializeField] GameObject tmp4;
     [SerializeField] GameObject tmp5;
-    [SerializeField] Canvas canvas;
 
     void Awake()
     {
@@ -22,8 +21,7 @@ public class TabBgd : MonoBehaviour
 
     public void On()
     {
-        canvas.sortingOrder = 10;
-        img.enabled = true;
+        // img.enabled = true;
         tmp1.SetActive(true);
         tmp2.SetActive(true);
         tmp3.SetActive(true);
@@ -33,8 +31,7 @@ public class TabBgd : MonoBehaviour
 
     public void Off()
     {
-        canvas.sortingOrder = 0;
-        img.enabled = false;
+        // img.enabled = false;
         tmp1.SetActive(false);
         tmp2.SetActive(false);
         tmp3.SetActive(false);

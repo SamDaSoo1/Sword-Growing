@@ -114,4 +114,9 @@ public class Magnet : MonoBehaviour
         yield return new WaitForSeconds(duration + 0.05f);
         list[1].GetComponent<CombineThrowingStar>().CombineCheck();
     }
+
+    private void OnDestroy()
+    {
+        DOTween.KillAll();   
+    }
 }
